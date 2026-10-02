@@ -365,4 +365,3 @@ if (window.AOS) {
 
 initHero();
 initServices();
-initServices();
