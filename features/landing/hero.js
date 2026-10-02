@@ -1,3 +1,27 @@
+export const heroMarkup = `
+  <section class="landing-hero" aria-labelledby="hero-title">
+    <div class="hero-copy">
+      <span class="hero-kicker"><i></i> SATU KOTA, TERHUBUNG</span>
+      <h1 id="hero-title">Masa depan kota dimulai dari <span class="typed-wrap"><span id="typed-word" aria-live="off">Bandar Lampung</span><i class="type-caret" aria-hidden="true"></i></span></h1>
+      <p>
+        Pantau kondisi kota, temukan layanan publik, dan ikut mengambil bagian
+        dalam perubahan Bandar Lampung.
+      </p>
+      <div class="hero-actions">
+        <a class="hero-primary" href="index.html?from=landing">
+          Jelajahi dasbor <svg><use href="#i-arrow" /></svg>
+        </a>
+        <a class="hero-secondary" href="#layanan">
+          Kenali layanan <span aria-hidden="true">↓</span>
+        </a>
+      </div>
+    </div>
+    <a class="hero-scroll" href="#tentang">
+      <span>GULIR UNTUK MENJELAJAH</span><i></i>
+    </a>
+  </section>
+`;
+
 export function initHero() {
   const typedWord = document.getElementById("typed-word");
   if (
