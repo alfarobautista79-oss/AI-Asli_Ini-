@@ -90,14 +90,14 @@
 
   function cctvMarkup(cameras) {
     const cards = cameras.map((camera) => `<article class="cctv-card">
-      <a class="cctv-preview" href="${camera.stream}" target="_blank" rel="noopener noreferrer" aria-label="Putar video CCTV ${camera.name}">
-        <span class="cctv-badge">CCTV ONLINE · POLRESTA</span><span class="cctv-play">${icon("arrow")}</span>
-        <span class="cctv-stream-icon">${icon("traffic")}</span>
-        <span class="cctv-preview-copy"><strong>${camera.name}</strong><span>Buka player video asli di situs sumber</span></span>
+      <a class="cctv-video-frame" href="https://www.youtube.com/watch?v=${camera.videoId}" target="_blank" rel="noopener noreferrer" aria-label="Tonton ${camera.name} di YouTube">
+        <img src="https://img.youtube.com/vi/${camera.videoId}/hqdefault.jpg" alt="Cuplikan video CCTV jalan ${camera.name}" loading="eager" decoding="async">
+        <span class="cctv-video-play" aria-hidden="true">&#9654;</span>
+        <span class="cctv-video-label">VIDEO PUBLIK</span>
       </a>
-      <div class="cctv-card-copy"><span>Sumber: CCTV Online Polresta Bandar Lampung</span><a href="${camera.stream}" target="_blank" rel="noopener noreferrer">${icon("arrow")} Putar video asli</a></div>
+      <div class="cctv-card-copy"><strong>${camera.name}</strong><span>${camera.channel} · video CCTV jalan publik</span><a href="https://www.youtube.com/watch?v=${camera.videoId}" target="_blank" rel="noopener noreferrer">${icon("arrow")} Buka video di YouTube</a></div>
     </article>`).join("");
-    return `<section class="panel cctv-panel"><div class="panel-head"><div><h2 class="panel-title">CCTV jalan Bandar Lampung</h2><p class="panel-subtitle">Kamera publik dengan lokasi berbeda</p></div><span class="demo-badge cctv-source">SUMBER RESMI</span></div><div class="cctv-grid">${cards}</div><div class="map-caption"><span>Siaran dibuka di situs resmi Polresta, tidak disalin ke halaman ini.</span><a href="https://restabandarlampung.lampung.polri.go.id/cctv" target="_blank" rel="noopener noreferrer">Portal CCTV Polresta ${icon("arrow")}</a></div></section>`;
+    return `<section class="panel cctv-panel"><div class="panel-head"><div><h2 class="panel-title">Video CCTV jalan publik</h2><p class="panel-subtitle">Video gratis dari kanal berbeda</p></div><span class="demo-badge cctv-source">YOUTUBE</span></div><div class="cctv-grid">${cards}</div><div class="map-caption"><span>Rekaman publik, bukan feed langsung dan bukan CCTV Bandar Lampung.</span><span>Player resmi YouTube</span></div></section>`;
   }
 
   function renderModuleDetail(item, view) {
@@ -108,14 +108,17 @@
     const locations = item.locations.map((location) => locationMarkup(item, location)).join("");
     const cctvPanel = item.id === "smart-traffic" ? cctvMarkup(item.cameras) : "";
     const trafficMap = item.id === "smart-traffic" ? Sora.map.roadMapPanel(true) : "";
+    const demoNote = item.id === "smart-traffic"
+      ? "Indikator kepadatan adalah simulasi; video CCTV di bawah merupakan rekaman publik."
+      : "Demo simulasi, bukan data sensor atau kamera langsung.";
     view.innerHTML = heading(
       item.group.toUpperCase(),
       item.label,
-      `${item.description} <span class="demo-note">Demo simulasi, bukan data sensor atau kamera langsung.</span>`,
+      `${item.description} <span class="demo-note">${demoNote}</span>`,
       `${dateStamp(date)}${actions}`,
     ) + `<div class="detail-layout">
       <section class="panel"><div class="detail-intro"><span class="module-icon">${icon(item.icon)}</span><div><h2>${item.label}</h2><p>Demo pemantauan · diperbarui ${dateLabel(date)}</p></div></div><div class="detail-body"><div class="detail-kpis">${kpis}</div><h3 class="detail-section-title">Tren pemantauan · 7 hari terakhir</h3><div class="detail-chart">${chartMarkup(item.values)}</div><p class="demo-note">Setiap batang menunjukkan nilai persentase simulasi.</p></div></section>
-      <section class="panel"><div class="panel-head"><div><h2 class="panel-title">Kontrol demo</h2><p class="panel-subtitle">Status pemantauan fitur ini</p></div></div><div class="monitor-summary"><span class="monitor-light ${monitoring ? "is-on" : ""}"></span><div><strong>${monitoring ? "Pemantauan diaktifkan" : "Pemantauan dijeda"}</strong><span>Waktu lokal · ${dateLabel(date)}</span></div></div><div class="monitor-description">Indikator kepadatan adalah simulasi. Video CCTV dibuka dari sumber resmi per kamera.</div></section>
+      <section class="panel"><div class="panel-head"><div><h2 class="panel-title">Kontrol demo</h2><p class="panel-subtitle">Status pemantauan fitur ini</p></div></div><div class="monitor-summary"><span class="monitor-light ${monitoring ? "is-on" : ""}"></span><div><strong>${monitoring ? "Pemantauan diaktifkan" : "Pemantauan dijeda"}</strong><span>Waktu lokal · ${dateLabel(date)}</span></div></div><div class="monitor-description">${item.id === "smart-traffic" ? "Indikator kepadatan adalah simulasi. Video berasal dari rekaman publik, bukan siaran CCTV langsung." : "Data pada halaman ini merupakan contoh untuk demonstrasi."}</div></section>
       ${cctvPanel}
       ${trafficMap}
       <section class="panel location-panel"><div class="panel-head"><div><h2 class="panel-title">Lokasi dan indikator</h2><p class="panel-subtitle">${item.locations.length} titik demo · Bandar Lampung</p></div><span class="demo-badge">DATA DEMO</span></div><div class="location-list">${locations}</div></section>

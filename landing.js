@@ -1,7 +1,7 @@
-import { initHero, heroMarkup } from "./features/landing/hero.js?v=20261002-landing";
-import { initServices, servicesMarkup } from "./features/landing/services.js?v=20261002-landing";
-import { aboutMarkup } from "./features/landing/about.js?v=20261002-landing";
-import { contactMarkup } from "./features/landing/contact.js?v=20261002-landing";
+import { initHero, heroMarkup } from "./features/landing/hero.js?v=20261002-youtube-cctv";
+import { initServices, servicesMarkup } from "./features/landing/services.js?v=20261002-youtube-cctv";
+import { aboutMarkup } from "./features/landing/about.js?v=20261002-youtube-cctv";
+import { contactMarkup } from "./features/landing/contact.js?v=20261002-youtube-cctv";
 
 const featureMarkup = {
   "features/landing/hero.html": heroMarkup,

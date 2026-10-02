@@ -36,7 +36,7 @@ export const servicesMarkup = `
             <span class="service-number">01 / MOBILITAS</span>
             <div>
               <h3>Lalu lintas & transportasi</h3>
-              <p>Lihat tingkat kepadatan jalan dan pratinjau CCTV demo.</p>
+              <p>Pantau kepadatan dan tonton video CCTV jalan publik.</p>
               <button type="button" data-service-view="smart-traffic" aria-label="Buka layanan lalu lintas dan transportasi">
                 <svg><use href="#i-arrow" /></svg>
               </button>
