@@ -1,6 +1,7 @@
 (() => {
   const { icon, heading } = Sora;
   const { getAllReports, renderReportRows } = Sora.reports;
+  const { roadMapPanel, initRoadMap } = Sora.map;
   let clockInterval;
 
   function dateText(date = new Date()) {
@@ -51,8 +52,9 @@
       "Kota yang terasa lebih terhubung.",
       "Jelajahi simulasi layanan Bandar Lampung. Belum terhubung ke sensor atau sistem pemerintah langsung.",
       actions,
-    ) + statsMarkup() + `<div class="overview-grid">${activityPanel()}${reportPanel()}</div>`;
+    ) + statsMarkup() + roadMapPanel(true) + `<div class="overview-grid">${activityPanel()}${reportPanel()}</div>`;
     renderReportRows(view.querySelector("#overview-reports"), getAllReports().slice(0, 3));
+    initRoadMap();
 
     clearInterval(clockInterval);
     clockInterval = setInterval(() => {

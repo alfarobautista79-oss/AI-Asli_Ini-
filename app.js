@@ -2,6 +2,7 @@
   const { modules, navigationGroups, moduleFor, icon } = Sora;
   const { renderOverview } = Sora.dashboard;
   const { renderModules, renderModuleDetail } = Sora.services;
+  const { renderMap } = Sora.map;
   const { renderNotifications } = Sora.notifications;
   const { renderReportView, openReportModal } = Sora.reports;
   let currentView = "overview";
@@ -41,6 +42,7 @@
     if (id === "modules") currentView = "modules";
     else if (
       id === "overview" ||
+      id === "road-map" ||
       id === "notifications" ||
       id === "citizen-report"
     )
@@ -51,6 +53,8 @@
         ? "Ringkasan kota"
         : currentView === "modules"
           ? "Semua layanan"
+          : currentView === "road-map"
+            ? "Peta jalan"
           : currentView === "notifications"
               ? "Notifikasi"
               : currentView === "citizen-report"
@@ -59,6 +63,7 @@
     renderNavigation();
     if (currentView === "overview") renderOverview(view);
     else if (currentView === "modules") renderModules(view);
+    else if (currentView === "road-map") renderMap(view);
     else if (currentView === "notifications") renderNotifications(view);
     else if (currentView === "citizen-report") renderReportView(view);
     else renderModuleDetail(moduleFor(currentView), view);

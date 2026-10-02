@@ -98,6 +98,7 @@
     const actions = `<button class="button ${monitoring ? "button-primary" : ""}" data-action="toggle-monitor" data-module-id="${item.id}" aria-pressed="${monitoring}">${icon("check")} ${monitoring ? "Pemantauan aktif" : "Aktifkan pemantauan"}</button><button class="button" data-view="modules">${icon("chevron")} Semua layanan</button>`;
     const kpis = item.kpis.map((value, index) => `<div class="detail-kpi"><span>${item.captions[index]}</span><strong>${value}</strong></div>`).join("");
     const locations = item.locations.map((location) => locationMarkup(item, location)).join("");
+    const trafficMap = item.id === "smart-traffic" ? Sora.map.roadMapPanel(true) : "";
     view.innerHTML = heading(
       item.group.toUpperCase(),
       item.label,
@@ -106,8 +107,10 @@
     ) + `<div class="detail-layout">
       <section class="panel"><div class="detail-intro"><span class="module-icon">${icon(item.icon)}</span><div><h2>${item.label}</h2><p>Demo pemantauan · diperbarui ${dateLabel(date)}</p></div></div><div class="detail-body"><div class="detail-kpis">${kpis}</div><h3 class="detail-section-title">Tren pemantauan · 7 hari terakhir</h3><div class="detail-chart">${chartMarkup(item.values)}</div><p class="demo-note">Setiap batang menunjukkan nilai persentase simulasi.</p></div></section>
       <section class="panel"><div class="panel-head"><div><h2 class="panel-title">Kontrol demo</h2><p class="panel-subtitle">Status pemantauan fitur ini</p></div></div><div class="monitor-summary"><span class="monitor-light ${monitoring ? "is-on" : ""}"></span><div><strong>${monitoring ? "Pemantauan diaktifkan" : "Pemantauan dijeda"}</strong><span>Waktu lokal · ${dateLabel(date)}</span></div></div><div class="monitor-description">Data pada halaman ini merupakan contoh untuk demonstrasi. Belum terhubung dengan sensor, CCTV, atau layanan pemerintah.</div></section>
+      ${trafficMap}
       <section class="panel location-panel"><div class="panel-head"><div><h2 class="panel-title">Lokasi dan indikator</h2><p class="panel-subtitle">${item.locations.length} titik demo · Bandar Lampung</p></div><span class="demo-badge">DATA DEMO</span></div><div class="location-list">${locations}</div></section>
     </div>`;
+    if (item.id === "smart-traffic") Sora.map.initRoadMap();
   }
 
   Sora.services = { renderModules, renderModuleDetail, dateLabel };

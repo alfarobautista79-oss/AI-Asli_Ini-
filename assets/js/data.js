@@ -204,7 +204,10 @@ Sora.demoReports = [
 Sora.navigationGroups = [
   {
     label: "KOTA",
-    items: [{ id: "overview", label: "Ringkasan kota", icon: "grid" }],
+    items: [
+      { id: "overview", label: "Ringkasan kota", icon: "grid" },
+      { id: "road-map", label: "Peta jalan", icon: "map" },
+    ],
   },
   {
     label: "LAYANAN KOTA",

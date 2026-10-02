@@ -1,256 +1,115 @@
 (() => {
   const { icon, heading } = Sora;
-  let cityMap;
+  let activeMap;
 
-  const mapPins = [
+  const roadSegments = [
     {
-      position: [-5.4292, 105.261],
-      label: "Balai Kota Bandar Lampung",
-      category: "facility",
-      color: "#6a9650",
+      label: "Jl. ZA Pagar Alam",
+      status: "Padat · 82%",
+      level: "heavy",
+      coordinates: [
+        [-5.3656, 105.2458],
+        [-5.3828, 105.2492],
+        [-5.3994, 105.2529],
+        [-5.4144, 105.258],
+      ],
+      destination: "Jalan ZA Pagar Alam Bandar Lampung",
     },
     {
-      position: [-5.4297, 105.2617],
-      label: "Tugu Adipura",
-      category: "facility",
-      color: "#6a9650",
+      label: "Jl. Teuku Umar",
+      status: "Ramai · 64%",
+      level: "moderate",
+      coordinates: [
+        [-5.3976, 105.2532],
+        [-5.4054, 105.2581],
+        [-5.4138, 105.2663],
+        [-5.4237, 105.275],
+      ],
+      destination: "Jalan Teuku Umar Bandar Lampung",
     },
     {
-      position: [-5.4215, 105.2583],
-      label: "Halte BRT Rajabasa",
-      category: "transit",
-      color: "#588bc9",
-    },
-    {
-      position: [-5.4144, 105.258],
-      label: "Kepadatan lalu lintas · Jl. ZA Pagar Alam",
-      category: "traffic",
-      color: "#ed775e",
-    },
-    {
-      position: [-5.4307, 105.2633],
-      label: "RSUD Dr. A. Dadi Tjokrodipo",
-      category: "facility",
-      color: "#6a9650",
-    },
-    {
-      position: [-5.4138, 105.2663],
-      label: "Kepadatan lalu lintas · Jl. Teuku Umar",
-      category: "traffic",
-      color: "#ed775e",
-    },
-    {
-      position: [-5.4352, 105.261],
-      label: "Taman Gajah",
-      category: "facility",
-      color: "#6a9650",
-    },
-    {
-      position: [-5.4506, 105.2678],
-      label: "Halte BRT Sukaraja",
-      category: "transit",
-      color: "#588bc9",
+      label: "Jl. Raden Intan",
+      status: "Lancar · 28%",
+      level: "clear",
+      coordinates: [
+        [-5.4234, 105.2535],
+        [-5.4284, 105.2582],
+        [-5.4331, 105.264],
+        [-5.4382, 105.2691],
+      ],
+      destination: "Jalan Raden Intan Bandar Lampung",
     },
   ];
 
-  function renderMapFilters() {
-    return `
-      <div class="map-filter">
-        <button class="filter-chip active" data-map-filter="all">Semua</button>
-        <button class="filter-chip active" data-map-filter="traffic">
-          <i class="legend-dot warn"></i>Lalu lintas
-        </button>
-        <button class="filter-chip active" data-map-filter="transit">
-          <i class="legend-dot transit"></i>Transportasi
-        </button>
-      </div>
-    `;
-  }
-
-  function renderMapFooter(large) {
-    if (!large) {
-      return `
-        <div class="map-caption">
-          <span class="map-live">Titik contoh</span>
-          <span>Basemap © Esri</span>
-        </div>
-      `;
-    }
-
-    return `
-      <div class="map-key">
-        <span class="legend-item"><i class="legend-dot"></i>Fasilitas kota</span>
-        <span class="legend-item"><i class="legend-dot warn"></i>Perhatian</span>
-        <span class="legend-item"><i class="legend-dot transit"></i>Transportasi</span>
-      </div>
-    `;
-  }
-
-  function mapPanel(large = false) {
-    const title = large ? "Peta fasilitas kota" : "Peta operasional kota";
-    const description = large
-      ? "cakupan peta provinsi"
-      : "peta dan titik contoh";
-    const actions = large
-      ? `<button class="button" data-action="report">${icon("plus")} Lapor lokasi</button>`
-      : renderMapFilters();
-
-    return `
-      <section class="panel ${large ? "map-large" : ""}">
-        <div class="panel-head">
-          <div>
-            <h2 class="panel-title">${title}</h2>
-            <p class="panel-subtitle">Provinsi Lampung · ${description}</p>
-          </div>
-          ${actions}
-        </div>
-        <div id="city-map" aria-label="Peta interaktif Provinsi Lampung"></div>
-        ${renderMapFooter(large)}
-      </section>
-    `;
+  function mapMarkup({ compact = false } = {}) {
+    const roads = roadSegments.map((road) => `<a class="road-row" href="https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(road.destination)}" target="_blank" rel="noopener noreferrer"><span class="road-line-key ${road.level}"></span><span class="road-name">${road.label}</span><strong>${road.status}</strong><span class="road-open">${icon("arrow")}</span></a>`).join("");
+    return `<section class="panel road-map-panel ${compact ? "road-map-compact" : ""}">
+      <div class="panel-head"><div><h2 class="panel-title">Peta jalan dan kemacetan</h2><p class="panel-subtitle">Koridor utama Bandar Lampung · data demo</p></div><span class="demo-badge">SIMULASI</span></div>
+      <div id="road-map" role="img" aria-label="Peta Bandar Lampung dengan garis ruas jalan berwarna menurut tingkat kemacetan"></div>
+      <div class="road-map-legend"><span><i class="road-line-key heavy"></i>Padat</span><span><i class="road-line-key moderate"></i>Ramai</span><span><i class="road-line-key clear"></i>Lancar</span></div>
+      <div class="road-list">${roads}</div>
+      <div class="map-caption"><span>Jalur dan tingkat kepadatan simulasi</span><span>Basemap © Esri</span></div>
+    </section>`;
   }
 
   function renderMap(view) {
-    const actions = `
-      <button class="button" data-action="report">
-        ${icon("plus")} Lapor lokasi
-      </button>
-    `;
-
-    view.innerHTML =
-      heading(
-        "PROVINSI LAMPUNG",
-        "Peta Lampung.",
-        "Fasilitas, mobilitas, dan titik perhatian di seluruh Provinsi Lampung.",
-        actions,
-      ) + mapPanel(true);
-
-    initMap();
+    const now = new Date();
+    const stamp = new Intl.DateTimeFormat("id-ID", { dateStyle: "medium", timeStyle: "short" }).format(now);
+    view.innerHTML = heading(
+      "KOTA · MOBILITAS",
+      "Peta jalan.",
+      "Lihat letak ruas jalan utama dan demo tingkat kepadatannya.",
+      `<time class="date-stamp" datetime="${now.toISOString()}">${icon("calendar")} ${stamp}</time>`,
+    ) + mapMarkup();
+    initRoadMap();
   }
 
   function showMapFallback(element) {
-    element.innerHTML = `
-      <div style="display:grid;height:100%;place-items:center;color:#66746a;font-size:11px;text-align:center;padding:20px">
-        Peta membutuhkan koneksi internet.<br />
-        Data layanan tetap bisa dijelajahi.
-      </div>
-    `;
+    element.innerHTML = "Peta memerlukan koneksi internet. Daftar ruas jalan tetap tersedia di bawah.";
   }
 
-  function createMap(element) {
-    const lampungBounds = L.latLngBounds([-6.25, 103.35], [-3.65, 106.35]);
-    const map = L.map(element, {
-      scrollWheelZoom: false,
-      zoomControl: false,
-      maxBounds: lampungBounds,
-      maxBoundsViscosity: 0.9,
-      minZoom: 7,
-      maxZoom: 18,
-    }).fitBounds(lampungBounds, {
-      padding: [12, 12],
-    });
-
-    L.tileLayer(
-      "https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}",
-      {
-        maxZoom: 19,
-        attribution:
-          "Tiles &copy; Esri, HERE, Garmin, &copy; OpenStreetMap contributors",
-      },
-    ).addTo(map);
-
-    L.control.zoom({ position: "bottomright" }).addTo(map);
-    return map;
-  }
-
-  function addMapPins(map) {
-    return mapPins.map((pin) => {
-      const marker = L.circleMarker(pin.position, {
-        radius: 7,
-        color: "#fff",
-        weight: 2,
-        fillColor: pin.color,
-        fillOpacity: 0.95,
-      })
-        .bindPopup(`<strong>${pin.label}</strong>`)
-        .addTo(map);
-
-      marker.options.category = pin.category;
-      return marker;
-    });
-  }
-
-  function setCategoryVisibility(map, markers, category, visible) {
-    markers
-      .filter((marker) => marker.options.category === category)
-      .forEach((marker) => {
-        if (visible && !map.hasLayer(marker)) marker.addTo(map);
-        if (!visible && map.hasLayer(marker)) map.removeLayer(marker);
-      });
-  }
-
-  function bindMapFilters(map, markers) {
-    const buttons = [...document.querySelectorAll("[data-map-filter]")];
-    const allButton = buttons.find(
-      (button) => button.dataset.mapFilter === "all",
-    );
-    const categoryButtons = buttons.filter(
-      (button) => button.dataset.mapFilter !== "all",
-    );
-
-    buttons.forEach((button) => {
-      button.addEventListener("click", () => {
-        const category = button.dataset.mapFilter;
-
-        if (category === "all") {
-          categoryButtons.forEach((categoryButton) =>
-            categoryButton.classList.add("active"),
-          );
-          markers.forEach((marker) => marker.addTo(map));
-          return;
-        }
-
-        button.classList.toggle("active");
-        setCategoryVisibility(
-          map,
-          markers,
-          category,
-          button.classList.contains("active"),
-        );
-        allButton.classList.toggle(
-          "active",
-          categoryButtons.every((categoryButton) =>
-            categoryButton.classList.contains("active"),
-          ),
-        );
-      });
-    });
-  }
-
-  function initMap() {
+  function initRoadMap() {
+    const element = document.getElementById("road-map");
+    if (!element) return;
+    if (activeMap) {
+      activeMap.remove();
+      activeMap = null;
+    }
     if (typeof L === "undefined") {
-      const element = document.getElementById("city-map");
-      if (element) showMapFallback(element);
+      showMapFallback(element);
       return;
     }
 
-    if (cityMap) {
-      cityMap.remove();
-      cityMap = null;
-    }
+    activeMap = L.map(element, { scrollWheelZoom: false, zoomControl: true }).setView([-5.414, 105.262], 13);
+    L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}", {
+      maxZoom: 19,
+      attribution: "Tiles &copy; Esri, HERE, Garmin, &copy; OpenStreetMap contributors",
+    }).addTo(activeMap);
 
-    const element = document.getElementById("city-map");
-    if (!element) return;
-
-    cityMap = createMap(element);
-    const markers = addMapPins(cityMap);
-    bindMapFilters(cityMap, markers);
-    requestAnimationFrame(() => cityMap?.invalidateSize());
+    const colors = { heavy: "#d75142", moderate: "#e2a640", clear: "#5b9a68" };
+    roadSegments.forEach((road) => {
+      L.polyline(road.coordinates, {
+        color: colors[road.level],
+        weight: 7,
+        opacity: 0.88,
+        lineCap: "round",
+        lineJoin: "round",
+      }).addTo(activeMap).bindPopup(`<strong>${road.label}</strong><br>${road.status} · data demo`);
+      const midpoint = road.coordinates[Math.floor(road.coordinates.length / 2)];
+      L.circleMarker(midpoint, {
+        radius: 6,
+        color: "#fff",
+        weight: 2,
+        fillColor: colors[road.level],
+        fillOpacity: 1,
+      }).addTo(activeMap).bindPopup(`<strong>${road.label}</strong><br>${road.status}`);
+    });
+    requestAnimationFrame(() => activeMap?.invalidateSize());
   }
 
-  Sora.map = {
-    mapPanel,
-    renderMap,
-    initMap,
-  };
+  function roadMapPanel(compact = false) {
+    return mapMarkup({ compact });
+  }
+
+  Sora.map = { renderMap, initRoadMap, roadMapPanel };
 })();
