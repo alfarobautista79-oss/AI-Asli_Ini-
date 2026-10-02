@@ -1,149 +1,96 @@
 (() => {
   const { icon, heading } = Sora;
-  const { appendSavedReports, getSavedReports, saveReport } =
-    Sora.reportStorage;
+  const { getAllReports, saveReport } = Sora.reportStorage;
   const { openReportModal } = Sora.reportForm;
 
-  const reportStats = [
-    {
-      label: "Perlu tindak lanjut",
-      icon: "clock",
-      value: "28",
-      change: "9 laporan baru",
-      changeClass: "warn",
-      summary: "Laporan yang menunggu petugas",
-    },
-    {
-      label: "Terselesaikan bulan ini",
-      icon: "check",
-      value: "74%",
-      change: "+12%",
-      summary: "Dari seluruh laporan yang masuk",
-    },
-    {
-      label: "Waktu respons rata-rata",
-      icon: "clock",
-      value: "3,2",
-      change: "jam",
-      summary: "Turun 18% dari bulan lalu",
-    },
-    {
-      label: "Partisipasi warga",
-      icon: "pin",
-      value: "1.482",
-      change: "+8,4%",
-      summary: "Warga aktif melaporkan",
-    },
-  ];
-
-  const recentReports = [
-    {
-      title: "Jalan berlubang",
-      details: "Jl. Teuku Umar · 34 menit lalu · Infrastruktur",
-      status: "Menunggu verifikasi",
-      tone: "",
-    },
-    {
-      title: "Tempat sampah penuh",
-      details: "Tugu Adipura · 1 jam lalu · Kebersihan",
-      status: "Sedang diproses",
-      tone: "amber",
-      statusClass: "progress",
-    },
-    {
-      title: "Lampu jalan mati",
-      details: "Jl. ZA Pagar Alam · 2 jam lalu · Penerangan",
-      status: "Selesai",
-      tone: "green",
-      statusClass: "done",
-    },
-    {
-      title: "Saluran air tersumbat",
-      details: "Rajabasa · 3 jam lalu · Drainase",
-      status: "Petugas menuju lokasi",
-      tone: "amber",
-      statusClass: "progress",
-    },
-    {
-      title: "Pohon tumbang",
-      details: "Jl. Sukaraja · 5 jam lalu · Lingkungan",
-      status: "Selesai",
-      tone: "green",
-      statusClass: "done",
-    },
-  ];
-
-  function renderStatCard(stat) {
-    return `
-      <article class="stat">
-        <div class="stat-top">
-          <span>${stat.label}</span>
-          <span class="stat-icon">${icon(stat.icon)}</span>
-        </div>
-        <div class="stat-value-row">
-          <strong class="stat-value">${stat.value}</strong>
-          <span class="stat-delta ${stat.changeClass || ""}">${stat.change}</span>
-        </div>
-        <div class="stat-sub">${stat.summary}</div>
-      </article>
-    `;
+  function formatDate(date) {
+    return new Intl.DateTimeFormat("id-ID", {
+      dateStyle: "medium",
+      timeStyle: "short",
+    }).format(date);
   }
 
-  function renderRecentReport(report) {
-    return `
-      <div class="incident">
-        <div class="incident-main">
-          <i class="incident-color ${report.tone || ""}"></i>
-          <div>
-            <strong>${report.title}</strong>
-            <span>${report.details}</span>
-          </div>
-        </div>
-        <span class="status-pill ${report.statusClass || ""}">${report.status}</span>
-      </div>
-    `;
+  function createReportRow(report) {
+    const row = document.createElement("article");
+    row.className = "incident report-item";
+
+    const main = document.createElement("div");
+    main.className = "incident-main";
+    const indicator = document.createElement("i");
+    indicator.className = `incident-color ${report.demo ? "amber" : "green"}`;
+
+    const copy = document.createElement("div");
+    const title = document.createElement("strong");
+    title.textContent = report.title || report.category || "Laporan warga";
+    const details = document.createElement("span");
+    details.textContent = [report.location, formatDate(new Date(report.createdAt)), report.description]
+      .filter(Boolean)
+      .join(" · ");
+    copy.append(title, details);
+    main.append(indicator, copy);
+
+    if (report.photo) {
+      const photo = document.createElement("img");
+      photo.className = "report-thumbnail";
+      photo.src = report.photo;
+      photo.alt = `Foto laporan ${title.textContent}`;
+      photo.loading = "lazy";
+      main.append(photo);
+    }
+
+    const status = document.createElement("span");
+    status.className = `status-pill ${report.demo ? "progress" : ""}`;
+    status.textContent = report.demo ? `Demo · ${report.status || "Contoh"}` : report.status || "Baru";
+    row.append(main, status);
+    if (report.location) {
+      const route = document.createElement("a");
+      route.className = "route-link report-route";
+      route.href = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(`${report.location}, Bandar Lampung`)}`;
+      route.target = "_blank";
+      route.rel = "noopener noreferrer";
+      route.textContent = "Buka arah di Google Maps";
+      row.append(route);
+    }
+    return row;
+  }
+
+  function renderReportRows(container, reports = getAllReports()) {
+    container.replaceChildren();
+    if (!reports.length) {
+      const empty = document.createElement("p");
+      empty.className = "empty-state";
+      empty.textContent = "Belum ada laporan. Buat laporan pertama untuk memulai.";
+      container.append(empty);
+      return;
+    }
+    reports.forEach((report) => container.append(createReportRow(report)));
+  }
+
+  function renderStat(label, value, summary, glyph) {
+    return `<article class="stat"><div class="stat-top"><span>${label}</span><span class="stat-icon">${icon(glyph)}</span></div><div class="stat-value-row"><strong class="stat-value">${value}</strong></div><div class="stat-sub">${summary}</div></article>`;
   }
 
   function renderReportView(view) {
-    const actions = `
-      <button class="button button-primary" data-action="report">
-        ${icon("plus")} Buat laporan
-      </button>
-    `;
-    const stats = reportStats.map(renderStatCard).join("");
-    const reports = recentReports.map(renderRecentReport).join("");
+    const reports = getAllReports();
+    const completed = reports.filter((report) => report.status === "Selesai").length;
+    const pending = reports.length - completed;
+    const demoCount = reports.filter((report) => report.demo).length;
+    const actions = `<button class="button button-primary" data-action="report">${icon("plus")} Buat laporan</button>`;
+    const stats = [
+      renderStat("Perlu tindak lanjut", pending, "Termasuk laporan demo", "clock"),
+      renderStat("Selesai", completed, "Status dari data laporan", "check"),
+      renderStat("Laporan tercatat", reports.length, `${demoCount} contoh demo`, "pin"),
+      renderStat("Lampiran foto", reports.filter((report) => report.photo).length, "Foto tersimpan lokal", "chart"),
+    ].join("");
 
-    view.innerHTML = `
-      ${heading(
-        "SUARA WARGA",
-        "Laporan warga.",
-        "Masalah lingkungan sekitar menjadi lebih mudah ditindaklanjuti.",
-        actions,
-      )}
-      <div class="stats">${stats}</div>
-      <section class="panel">
-        <div class="panel-head">
-          <div>
-            <h2 class="panel-title">Laporan terbaru</h2>
-            <p class="panel-subtitle">Status penanganan laporan warga</p>
-          </div>
-          <button class="button" data-action="report">
-            ${icon("plus")} Buat laporan
-          </button>
-        </div>
-        <div class="incident-list">${reports}</div>
-      </section>
-    `;
-
-    view.querySelector(".heading-note").textContent =
-      "Statistik merupakan simulasi. Laporan baru disimpan lokal di browser ini.";
-    appendSavedReports(view);
+    view.innerHTML = `${heading(
+      "RUANG WARGA",
+      "Laporan warga.",
+      "Daftar ini diambil dari laporan demo dan laporan yang dibuat pada browser ini.",
+      actions,
+    )}<div class="stats">${stats}</div><section class="panel"><div class="panel-head"><div><h2 class="panel-title">Laporan terbaru</h2><p class="panel-subtitle">Tanggal, status, lokasi, dan foto mengikuti data laporan.</p></div><time class="date-stamp" datetime="${new Date().toISOString()}">${formatDate(new Date())}</time></div><div class="incident-list report-list" id="report-list"></div></section>`;
+    renderReportRows(view.querySelector("#report-list"), reports);
   }
 
-  Sora.reports = {
-    renderReportView,
-    openReportModal,
-    getSavedReports,
-    saveReport,
-  };
+  Sora.reports = { renderReportView, renderReportRows, getAllReports, saveReport, openReportModal };
 })();

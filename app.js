@@ -2,7 +2,6 @@
   const { modules, navigationGroups, moduleFor, icon } = Sora;
   const { renderOverview } = Sora.dashboard;
   const { renderModules, renderModuleDetail } = Sora.services;
-  const { renderMap } = Sora.map;
   const { renderNotifications } = Sora.notifications;
   const { renderReportView, openReportModal } = Sora.reports;
   let currentView = "overview";
@@ -23,7 +22,7 @@
     navigation.innerHTML = navigationGroups
       .map(
         (group) =>
-          `<div class="nav-label">${group.label}</div>${group.items.map((item) => `<button class="nav-item ${currentView === item.id ? "active" : ""}" data-view="${item.id}" ${currentView === item.id ? 'aria-current="page"' : ""}>${icon(item.icon, "icon")}<span class="nav-text">${item.label}</span>${item.id === "citizen-report" ? '<span class="nav-count">28</span>' : ""}</button>`).join("")}`,
+          `<div class="nav-label">${group.label}</div>${group.items.map((item) => `<button class="nav-item ${currentView === item.id ? "active" : ""}" data-view="${item.id}" ${currentView === item.id ? 'aria-current="page"' : ""}>${icon(item.icon, "icon")}<span class="nav-text">${item.label}</span>${item.id === "citizen-report" ? `<span class="nav-count">${Sora.reports.getAllReports().length}</span>` : ""}</button>`).join("")}`,
       )
       .join("");
   }
@@ -42,7 +41,6 @@
     if (id === "modules") currentView = "modules";
     else if (
       id === "overview" ||
-      id === "city-map" ||
       id === "notifications" ||
       id === "citizen-report"
     )
@@ -53,9 +51,7 @@
         ? "Ringkasan kota"
         : currentView === "modules"
           ? "Semua layanan"
-          : currentView === "city-map"
-            ? "Peta kota"
-            : currentView === "notifications"
+          : currentView === "notifications"
               ? "Notifikasi"
               : currentView === "citizen-report"
                 ? "Laporan warga"
@@ -63,7 +59,6 @@
     renderNavigation();
     if (currentView === "overview") renderOverview(view);
     else if (currentView === "modules") renderModules(view);
-    else if (currentView === "city-map") renderMap(view);
     else if (currentView === "notifications") renderNotifications(view);
     else if (currentView === "citizen-report") renderReportView(view);
     else renderModuleDetail(moduleFor(currentView), view);
@@ -85,6 +80,29 @@
       if (actionTarget.dataset.action === "report") openReportModal();
       if (actionTarget.dataset.action === "close-modal")
         document.getElementById("modal-root").innerHTML = "";
+      if (actionTarget.dataset.action === "toggle-monitor") {
+        const moduleId = actionTarget.dataset.moduleId;
+        const isActive = actionTarget.getAttribute("aria-pressed") === "true";
+        try {
+          const key = "laci-demo-monitoring";
+          const states = JSON.parse(localStorage.getItem(key) || "{}");
+          states[moduleId] = !isActive;
+          localStorage.setItem(key, JSON.stringify(states));
+          actionTarget.setAttribute("aria-pressed", String(!isActive));
+          actionTarget.classList.toggle("button-primary", !isActive);
+          actionTarget.innerHTML = `${icon("check")} ${!isActive ? "Pemantauan aktif" : "Aktifkan pemantauan"}`;
+          const monitorSummary = document.querySelector(".monitor-summary");
+          if (monitorSummary) {
+            monitorSummary.querySelector(".monitor-light").classList.toggle("is-on", !isActive);
+            monitorSummary.querySelector("strong").textContent = !isActive
+              ? "Pemantauan diaktifkan"
+              : "Pemantauan dijeda";
+          }
+          showToast(`${moduleFor(moduleId).label}: ${!isActive ? "pemantauan diaktifkan" : "pemantauan dijeda"}.`);
+        } catch {
+          showToast("Status pemantauan tidak dapat disimpan di browser ini.");
+        }
+      }
       if (actionTarget.dataset.action === "read-notifications") {
         try {
           localStorage.setItem(notificationReadKey, "true");
@@ -116,22 +134,40 @@
     }
   });
 
-  document.addEventListener("submit", (event) => {
+  document.addEventListener("submit", async (event) => {
     if (event.target.id !== "report-form") return;
     event.preventDefault();
     const location = document.getElementById("report-location").value.trim();
-    const coordinates = document.getElementById("report-coordinates").value;
-    if (!location && !coordinates) {
-      document.getElementById("report-map-status").textContent =
-        "Isi alamat atau pilih titik lokasi pada peta.";
+    if (!location) {
       document.getElementById("report-location").focus();
       return;
+    }
+    const photoInput = document.getElementById("report-photo");
+    const photoFile = photoInput.files[0];
+    let photo = "";
+    if (photoFile) {
+      if (photoFile.size > 750 * 1024) {
+        showToast("Ukuran foto maksimal 750 KB.");
+        return;
+      }
+      try {
+        photo = await new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(reader.result);
+          reader.onerror = () => reject(reader.error);
+          reader.readAsDataURL(photoFile);
+        });
+      } catch {
+        showToast("Foto tidak dapat dibaca. Coba pilih foto lain.");
+        return;
+      }
     }
     const report = {
       category: document.getElementById("report-category").value,
       location,
-      coordinates,
       description: document.getElementById("report-description").value.trim(),
+      photo,
+      status: "Menunggu verifikasi",
     };
     if (!Sora.reports.saveReport(report)) {
       showToast(
@@ -140,13 +176,10 @@
       return;
     }
     document.getElementById("modal-root").innerHTML = "";
-    const reportLocation = location || `titik terpilih (${coordinates})`;
-    const selectedCoordinates =
-      location && coordinates ? ` · Pin: ${coordinates}` : "";
-    showToast(
-      `Laporan untuk ${reportLocation}${selectedCoordinates} berhasil dikirim.`,
-    );
+    showToast(`Laporan untuk ${location} berhasil disimpan di browser ini.`);
+    renderNavigation();
     if (currentView === "citizen-report") renderReportView(view);
+    else if (currentView === "overview") renderOverview(view);
   });
 
   document.addEventListener("keydown", (event) => {

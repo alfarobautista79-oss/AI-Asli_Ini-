@@ -21,6 +21,25 @@
   background: #fff;
 }
 
+.stat-link {
+  width: 100%;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.stat-link:hover {
+  border-color: #c6d4b5;
+}
+
+.overview-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 14px;
+  margin-top: 14px;
+}
+
 .stat-top {
   display: flex;
   align-items: center;
@@ -96,6 +115,20 @@
 
 .feed-list {
   padding: 2px 14px;
+}
+
+.feed-action {
+  width: 100%;
+  border: 0;
+  color: inherit;
+  background: transparent;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.feed-action:hover {
+  background: #f8faf6;
 }
 
 .feed-item {

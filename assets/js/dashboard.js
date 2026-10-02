@@ -1,109 +1,68 @@
 (() => {
-  const {
-    icon,
-    heading
-  } = Sora;
-  const {
-    mapPanel,
-    initMap
-  } = Sora.map;
+  const { icon, heading } = Sora;
+  const { getAllReports, renderReportRows } = Sora.reports;
   let clockInterval;
 
+  function dateText(date = new Date()) {
+    return new Intl.DateTimeFormat("id-ID", {
+      weekday: "long",
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      hourCycle: "h23",
+    }).format(date);
+  }
+
   function statsMarkup() {
-    const data = [{
-      label: 'Kualitas udara',
-      value: '42',
-      suffix: 'AQI',
-      delta: 'Baik',
-      glyph: 'leaf',
-      sub: 'Rata-rata 19 sensor kota'
-    }, {
-      label: 'Lalu lintas',
-      value: '24',
-      suffix: 'km/j',
-      delta: '−8% padat',
-      glyph: 'traffic',
-      sub: 'Kecepatan rata-rata jalan utama',
-      warn: true
-    }, {
-      label: 'Energi terpakai',
-      value: '4,82',
-      suffix: 'MW',
-      delta: '−6,2%',
-      glyph: 'bolt',
-      sub: 'Dibandingkan minggu sebelumnya'
-    }, {
-      label: 'Laporan warga',
-      value: '28',
-      suffix: 'baru',
-      delta: '9 hari ini',
-      glyph: 'pin',
-      sub: '19 sedang ditangani',
-      warn: true
-    }];
-    return `<div class="stats">${data.map((item) => `<article class="stat"><div class="stat-top"><span>${item.label}</span><span class="stat-icon">${icon(item.glyph)}</span></div><div class="stat-value-row"><strong class="stat-value">${item.value}</strong><span class="stat-delta ${item.warn ? 'warn' : ''}">${item.suffix} · ${item.delta}</span></div><div class="stat-sub">${item.sub}</div></article>`).join('')}</div>`;
+    const traffic = Sora.moduleFor("smart-traffic");
+    const green = Sora.moduleFor("green-city");
+    const waste = Sora.moduleFor("smart-waste");
+    const reports = getAllReports();
+    const data = [
+      { label: "Lalu lintas", value: traffic.kpis[0], suffix: "titik", delta: traffic.status, glyph: "traffic", target: "smart-traffic", warn: true },
+      { label: "Kualitas udara", value: "42", suffix: "AQI", delta: "baik · demo", glyph: "leaf", target: "green-city" },
+      { label: "Tempat sampah", value: waste.locations.length, suffix: "lokasi demo", delta: "kapasitas dipantau", glyph: "trash", target: "smart-waste" },
+      { label: "Laporan warga", value: reports.length, suffix: "tercatat", delta: `${reports.filter((report) => report.demo).length} data demo`, glyph: "pin", target: "citizen-report", warn: true },
+    ];
+    return `<div class="stats">${data.map((item) => `<button class="stat stat-link" data-view="${item.target}"><div class="stat-top"><span>${item.label}</span><span class="stat-icon">${icon(item.glyph)}</span></div><div class="stat-value-row"><strong class="stat-value">${item.value}</strong><span class="stat-delta ${item.warn ? "warn" : ""}">${item.suffix}</span></div><div class="stat-sub">${item.delta}</div></button>`).join("")}</div>`;
   }
 
-  function feedPanel() {
-    const events = [{
-      icon: 'cloud',
-      title: 'Peringatan hujan lokal',
-      text: 'Tanjung Karang · hujan sedang terdeteksi',
-      time: '3 mnt',
-      tone: 'warn'
-    }, {
-      icon: 'bus',
-      title: 'Bus Trans Bandar Lampung tiba',
-      text: 'Halte Rajabasa · koridor kota',
-      time: '8 mnt',
-      tone: 'blue'
-    }, {
-      icon: 'lamp',
-      title: 'Lampu jalan diperbaiki',
-      text: 'Jl. ZA Pagar Alam · tim teknis di lokasi',
-      time: '21 mnt',
-      tone: ''
-    }, {
-      icon: 'pin',
-      title: 'Laporan jalan rusak',
-      text: 'Jl. Teuku Umar · menunggu verifikasi',
-      time: '34 mnt',
-      tone: 'warn'
-    }];
-    return `<section class="panel feed-panel"><div class="panel-head"><div><h2 class="panel-title">Aktivitas kota</h2><p class="panel-subtitle">Pembaruan dari seluruh layanan</p></div><button class="icon-button" data-view="notifications" aria-label="Lihat semua aktivitas">${icon('arrow')}</button></div><div class="feed-list">${events.map((event) => `<div class="feed-item"><span class="feed-icon ${event.tone}">${icon(event.icon)}</span><div class="feed-copy"><strong>${event.title}</strong><span>${event.text}</span></div><time class="feed-time">${event.time}</time></div>`).join('')}</div><div class="feed-footer"><button class="text-button" data-view="notifications">Semua notifikasi ${icon('arrow')}</button></div></section>`;
+  function activityPanel() {
+    const events = [
+      { icon: "traffic", title: "Pantauan kepadatan jalan", text: "Jl. ZA Pagar Alam · CCTV demo", view: "smart-traffic", tone: "warn" },
+      { icon: "cloud", title: "Titik sungai diperbarui", text: "Way Kuala · status simulasi siaga", view: "flood-monitoring", tone: "warn" },
+      { icon: "trash", title: "Lokasi tempat sampah", text: "Tugu Adipura · kapasitas demo 78%", view: "smart-waste", tone: "" },
+      { icon: "car", title: "Slot parkir umum tersedia", text: "Taman Gajah · data demo", view: "smart-parking", tone: "blue" },
+    ];
+    return `<section class="panel feed-panel"><div class="panel-head"><div><h2 class="panel-title">Aktivitas demo</h2><p class="panel-subtitle">Contoh pembaruan layanan · ${dateText()}</p></div></div><div class="feed-list">${events.map((event) => `<button class="feed-item feed-action" data-view="${event.view}"><span class="feed-icon ${event.tone}">${icon(event.icon)}</span><span class="feed-copy"><strong>${event.title}</strong><span>${event.text}</span></span><span class="feed-time">Buka</span></button>`).join("")}</div></section>`;
   }
 
-  function lowerPanels() {
-    return `<div class="lower-grid"><section class="panel"><div class="panel-head"><div><h2 class="panel-title">Energi kota</h2><p class="panel-subtitle">Konsumsi fasilitas publik hari ini</p></div><button class="text-button" data-view="smart-energy">Detail ${icon('arrow')}</button></div><div class="energy-content"><div class="energy-score"><div class="energy-score-inner"><strong>78</strong><span>efisiensi</span></div></div><div class="energy-details"><div class="energy-total">4,82 <small>MW terpakai</small></div><p>Turun 6,2% dibanding minggu lalu</p><div class="bar-line"><span></span><span></span><span></span></div><div class="bar-labels"><span>Gedung 47%</span><span>Lampu 31%</span><span>Lainnya 22%</span></div></div></div></section><section class="panel"><div class="panel-head"><div><h2 class="panel-title">Laporan prioritas</h2><p class="panel-subtitle">Butuh tindak lanjut petugas</p></div><button class="text-button" data-view="citizen-report">Semua laporan ${icon('arrow')}</button></div><div class="incident-list"><div class="incident"><div class="incident-main"><i class="incident-color"></i><div><strong>Jalan berlubang</strong><span>Jl. Teuku Umar · 34 menit lalu</span></div></div><span class="status-pill">Baru</span></div><div class="incident"><div class="incident-main"><i class="incident-color amber"></i><div><strong>Tempat sampah penuh</strong><span>Tugu Adipura · 1 jam lalu · Kebersihan</span></div></div><span class="status-pill progress">Diproses</span></div><div class="incident"><div class="incident-main"><i class="incident-color green"></i><div><strong>Lampu jalan mati</strong><span>Jl. ZA Pagar Alam · 2 jam lalu</span></div></div><span class="status-pill done">Selesai</span></div></div></section></div>`;
+  function reportPanel() {
+    return `<section class="panel"><div class="panel-head"><div><h2 class="panel-title">Laporan terbaru</h2><p class="panel-subtitle">Data demo dan laporan browser ini</p></div><button class="text-button" data-view="citizen-report">Semua laporan ${icon("arrow")}</button></div><div class="incident-list report-list" id="overview-reports"></div></section>`;
   }
 
   function renderOverview(view) {
-    const currentDate = new Date();
-    const localizedDate = new Intl.DateTimeFormat('id-ID', {
-      weekday: 'long',
-      day: 'numeric',
-      month: 'long',
-      year: 'numeric'
-    }).format(currentDate);
-    const localizedTime = new Intl.DateTimeFormat('id-ID', {
-      hour: '2-digit',
-      minute: '2-digit',
-      hourCycle: 'h23'
-    }).format(currentDate);
-    const actions = `<span class="date-stamp">${icon('calendar')} ${localizedDate}<span aria-hidden="true">·</span>${icon('clock')} <time id="local-clock">${localizedTime}</time></span><button class="button button-primary" data-action="report">${icon('plus')} Buat laporan</button>`;
-    view.innerHTML = heading(localizedDate.toLocaleUpperCase('id-ID'), 'Kota yang terasa lebih terhubung.', 'Pantau kondisi Bandar Lampung dan respons kota hari ini. <span class="demo-note">Data indikator pada prototipe ini adalah simulasi, bukan data sensor langsung.</span>', actions) + statsMarkup() + `<div class="dashboard-grid">${mapPanel()}${feedPanel()}</div>` + lowerPanels();
+    const now = new Date();
+    const actions = `<time class="date-stamp" id="local-clock" datetime="${now.toISOString()}">${dateText(now)}</time><button class="button button-primary" data-action="report">${icon("plus")} Buat laporan</button>`;
+    view.innerHTML = heading(
+      "RINGKASAN KOTA · DEMO",
+      "Kota yang terasa lebih terhubung.",
+      "Jelajahi simulasi layanan Bandar Lampung. Belum terhubung ke sensor atau sistem pemerintah langsung.",
+      actions,
+    ) + statsMarkup() + `<div class="overview-grid">${activityPanel()}${reportPanel()}</div>`;
+    renderReportRows(view.querySelector("#overview-reports"), getAllReports().slice(0, 3));
+
     clearInterval(clockInterval);
     clockInterval = setInterval(() => {
-      const clock = document.getElementById('local-clock');
-      if (clock) clock.textContent = new Intl.DateTimeFormat('id-ID', {
-        hour: '2-digit',
-        minute: '2-digit',
-        hourCycle: 'h23'
-      }).format(new Date());
+      const clock = document.getElementById("local-clock");
+      if (!clock) return;
+      const current = new Date();
+      clock.dateTime = current.toISOString();
+      clock.textContent = dateText(current);
     }, 30000);
-    initMap();
   }
-  Sora.dashboard = {
-    renderOverview
-  };
+
+  Sora.dashboard = { renderOverview };
 })();

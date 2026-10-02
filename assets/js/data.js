@@ -1,229 +1,223 @@
 window.Sora = window.Sora || {};
 
-Sora.modules = [{
-  id: 'smart-home',
-  label: 'Smart Home',
-  icon: 'home',
-  group: 'Perangkat',
-  description: 'Kontrol perangkat rumah: lampu, AC, kamera, dan pintu otomatis.',
-  metric: '1.284',
-  unit: 'perangkat terhubung',
-  status: '92% aktif',
-  values: [42, 57, 48, 68, 61, 77, 70],
-  kpis: ['1.284', '92%', '18'],
-  captions: ['Terhubung', 'Ketersediaan', 'Butuh perhatian']
-}, {
-  id: 'smart-traffic',
-  label: 'Smart Traffic',
-  icon: 'traffic',
-  group: 'Mobilitas',
-  description: 'Pantau kepadatan jalan dan temukan rute alternatif.',
-  metric: '12 titik',
-  unit: 'kemacetan terpantau',
-  status: '3 perlu perhatian',
-  alert: true,
-  values: [32, 47, 41, 78, 65, 90, 59],
-  kpis: ['12', '24 km/j', '4'],
-  captions: ['Titik padat', 'Kecepatan rata-rata', 'Rute alternatif']
-}, {
-  id: 'smart-transport',
-  label: 'Smart Transportation',
-  icon: 'bus',
-  group: 'Mobilitas',
-  description: 'Jadwal bus, posisi kendaraan, dan halte terdekat dalam satu tampilan.',
-  metric: '148 bus',
-  unit: 'beroperasi hari ini',
-  status: '12 rute aktif',
-  values: [48, 62, 70, 55, 79, 68, 82],
-  kpis: ['148', '12', '6 mnt'],
-  captions: ['Bus aktif', 'Rute berjalan', 'Waktu tunggu']
-}, {
-  id: 'smart-waste',
-  label: 'Smart Waste',
-  icon: 'trash',
-  group: 'Lingkungan',
-  description: 'Pantau kapasitas tempat sampah dan jadwal pengangkutan.',
-  metric: '86%',
-  unit: 'pengangkutan terjadwal',
-  status: '7 titik perlu dijemput',
-  alert: true,
-  values: [55, 43, 62, 50, 76, 59, 71],
-  kpis: ['86%', '214', '7'],
-  captions: ['Jadwal terpenuhi', 'Titik terpantau', 'Kapasitas penuh']
-}, {
-  id: 'street-light',
-  label: 'Smart Street Light',
-  icon: 'lamp',
-  group: 'Lingkungan',
-  description: 'Lampu jalan menyesuaikan intensitas dengan cahaya sekitar.',
-  metric: '3.842',
-  unit: 'lampu terkoneksi',
-  status: '97% beroperasi',
-  values: [28, 37, 53, 68, 82, 75, 60],
-  kpis: ['3.842', '97%', '31%'],
-  captions: ['Lampu terkoneksi', 'Kondisi baik', 'Hemat energi']
-}, {
-  id: 'green-city',
-  label: 'Smart Green City',
-  icon: 'leaf',
-  group: 'Lingkungan',
-  description: 'Pantau kualitas udara, suhu, dan kesehatan ruang hijau kota.',
-  metric: 'AQI 42',
-  unit: 'kualitas udara baik',
-  status: '19 sensor online',
-  values: [74, 71, 69, 58, 54, 47, 42],
-  kpis: ['42', '26°C', '34%'],
-  captions: ['Indeks udara', 'Suhu rata-rata', 'Ruang hijau']
-}, {
-  id: 'smart-water',
-  label: 'Smart Water',
-  icon: 'drop',
-  group: 'Lingkungan',
-  description: 'Monitoring konsumsi air dan deteksi kebocoran lebih dini.',
-  metric: '−8,4%',
-  unit: 'konsumsi vs. bulan lalu',
-  status: '2 anomali aliran',
-  alert: true,
-  values: [70, 63, 72, 59, 53, 49, 44],
-  kpis: ['−8,4%', '2', '98%'],
-  captions: ['Konsumsi bulanan', 'Anomali terdeteksi', 'Jaringan normal']
-}, {
-  id: 'smart-energy',
-  label: 'Smart Energy',
-  icon: 'bolt',
-  group: 'Lingkungan',
-  description: 'Pantau konsumsi listrik fasilitas umum dan potensi penghematan.',
-  metric: '4,82 MW',
-  unit: 'konsumsi listrik saat ini',
-  status: 'Efisiensi 78%',
-  values: [54, 60, 55, 72, 64, 79, 67],
-  kpis: ['4,82 MW', '78%', '−6,2%'],
-  captions: ['Konsumsi saat ini', 'Skor efisiensi', 'Vs. bulan lalu']
-}, {
-  id: 'smart-security',
-  label: 'Smart Security',
-  icon: 'shield',
-  group: 'Keamanan',
-  description: 'Keamanan kota dengan CCTV, tombol darurat, dan laporan kejadian.',
-  metric: '326 CCTV',
-  unit: 'kamera aktif',
-  status: '1 laporan prioritas',
-  alert: true,
-  values: [87, 89, 82, 90, 85, 94, 92],
-  kpis: ['326', '24/7', '1'],
-  captions: ['Kamera aktif', 'Pusat pantau', 'Insiden prioritas']
-}, {
-  id: 'citizen-report',
-  label: 'Citizen Report',
-  icon: 'pin',
-  group: 'Keamanan',
-  description: 'Saluran warga untuk melaporkan masalah di lingkungan sekitar.',
-  metric: '28 laporan',
-  unit: 'menunggu tindak lanjut',
-  status: '74% terselesaikan',
-  values: [46, 52, 67, 61, 79, 73, 86],
-  kpis: ['28', '74%', '3,2 jam'],
-  captions: ['Menunggu tindakan', 'Terselesaikan', 'Waktu respons']
-}, {
-  id: 'city-map',
-  label: 'Smart City Map',
-  icon: 'map',
-  group: 'Kota',
-  description: 'Peta fasilitas publik: rumah sakit, halte, taman, dan kantor pemerintahan.',
-  metric: '486 titik',
-  unit: 'fasilitas kota terpetakan',
-  status: 'Data diperbarui hari ini',
-  values: [52, 55, 62, 64, 70, 75, 82],
-  kpis: ['486', '8 kategori', 'Hari ini'],
-  captions: ['Lokasi terpetakan', 'Jenis fasilitas', 'Pembaruan']
-}, {
-  id: 'urban-dashboard',
-  label: 'Urban Dashboard',
-  icon: 'chart',
-  group: 'Kota',
-  description: 'Gambaran menyeluruh kondisi kota, dari lalu lintas hingga kualitas udara.',
-  metric: '78 / 100',
-  unit: 'indeks kota hari ini',
-  status: 'Naik 4 poin minggu ini',
-  values: [55, 58, 56, 65, 62, 73, 78],
-  kpis: ['78', '+4', '15'],
-  captions: ['Indeks kota', 'Perubahan mingguan', 'Modul terpantau']
-}, {
-  id: 'smart-parking',
-  label: 'Smart Parking',
-  icon: 'car',
-  group: 'Mobilitas',
-  description: 'Cari lokasi parkir dan cek slot yang tersedia secara langsung.',
-  metric: '1.248',
-  unit: 'slot parkir tersedia',
-  status: '64 lokasi terpantau',
-  values: [83, 77, 68, 61, 53, 45, 39],
-  kpis: ['1.248', '64', '82%'],
-  captions: ['Slot tersedia', 'Lokasi aktif', 'Akurasi data']
-}, {
-  id: 'flood-monitoring',
-  label: 'Flood Monitoring',
-  icon: 'cloud',
-  group: 'Lingkungan',
-  description: 'Pantau ketinggian air dan terima peringatan dini di area rawan.',
-  metric: 'Aman',
-  unit: 'status siaga banjir',
-  status: '2 sensor perlu dipantau',
-  values: [28, 31, 29, 36, 32, 27, 25],
-  kpis: ['Aman', '18', '2'],
-  captions: ['Status kota', 'Sensor aktif', 'Perlu dipantau']
-}, {
-  id: 'smart-notification',
-  label: 'Smart Notification',
-  icon: 'bell',
-  group: 'Keamanan',
-  description: 'Peringatan kota untuk banjir, cuaca ekstrem, dan kemacetan.',
-  metric: '3 aktif',
-  unit: 'notifikasi prioritas',
-  status: 'Dikirim ke 12.480 warga',
-  alert: true,
-  values: [28, 36, 42, 30, 57, 45, 38],
-  kpis: ['3', '12.480', '98%'],
-  captions: ['Peringatan aktif', 'Penerima', 'Terkirim']
-}];
+Sora.modules = [
+  {
+    id: "smart-traffic",
+    label: "Smart Traffic",
+    icon: "traffic",
+    group: "Mobilitas",
+    description: "Pantau tingkat kemacetan dan pratinjau CCTV demo pada jalan utama.",
+    metric: "12 titik",
+    unit: "pantauan lalu lintas",
+    status: "2 titik padat",
+    alert: true,
+    values: [32, 47, 41, 78, 65, 90, 59],
+    kpis: ["12", "24 km/j", "2"],
+    captions: ["Titik terpantau", "Kecepatan rata-rata", "Padat"],
+    locations: [
+      { label: "Jl. ZA Pagar Alam", detail: "CCTV demo 01 · padat", value: 82, status: "Berat", query: "Jalan ZA Pagar Alam Bandar Lampung" },
+      { label: "Jl. Teuku Umar", detail: "CCTV demo 02 · ramai", value: 64, status: "Sedang", query: "Jalan Teuku Umar Bandar Lampung" },
+      { label: "Jl. Raden Intan", detail: "CCTV demo 03 · lancar", value: 28, status: "Lancar", query: "Jalan Raden Intan Bandar Lampung" },
+    ],
+  },
+  {
+    id: "smart-transport",
+    label: "Smart Transportation",
+    icon: "bus",
+    group: "Mobilitas",
+    description: "Demo jadwal bus, posisi kendaraan, halte, dan waktu tunggu.",
+    metric: "12 rute",
+    unit: "rute simulasi",
+    status: "6 menit waktu tunggu",
+    values: [48, 62, 70, 55, 79, 68, 82],
+    kpis: ["148", "12", "6 mnt"],
+    captions: ["Bus demo", "Rute simulasi", "Waktu tunggu"],
+    locations: [
+      { label: "Halte Rajabasa", detail: "Koridor demo · tiba 6 menit", value: 78, status: "Beroperasi", query: "Terminal Rajabasa Bandar Lampung" },
+      { label: "Halte Tanjung Karang", detail: "Koridor demo · tiba 9 menit", value: 64, status: "Beroperasi", query: "Stasiun Tanjung Karang Bandar Lampung" },
+    ],
+  },
+  {
+    id: "smart-waste",
+    label: "Smart Waste",
+    icon: "trash",
+    group: "Lingkungan",
+    description: "Lihat lokasi tempat sampah umum, kapasitas, dan jadwal angkut demo.",
+    metric: "7 titik",
+    unit: "perlu dijemput",
+    status: "214 lokasi demo",
+    alert: true,
+    values: [55, 43, 62, 50, 76, 59, 71],
+    kpis: ["86%", "214", "7"],
+    captions: ["Jadwal terpenuhi", "Lokasi tersedia", "Perlu dijemput"],
+    locations: [
+      { label: "Tugu Adipura", detail: "Tempat sampah umum · kapasitas 78%", value: 78, status: "Tersedia", query: "Tugu Adipura Bandar Lampung" },
+      { label: "Taman Gajah", detail: "Tempat sampah umum · kapasitas 42%", value: 42, status: "Tersedia", query: "Taman Gajah Bandar Lampung" },
+      { label: "Pasar Bambu Kuning", detail: "Tempat sampah umum · kapasitas 91%", value: 91, status: "Perlu dijemput", query: "Pasar Bambu Kuning Bandar Lampung" },
+    ],
+  },
+  {
+    id: "green-city",
+    label: "Smart Green City",
+    icon: "leaf",
+    group: "Lingkungan",
+    description: "Bandingkan kualitas udara dan suhu berdasarkan lokasi sensor demo.",
+    metric: "AQI 42",
+    unit: "rata-rata simulasi",
+    status: "4 lokasi terpantau",
+    values: [74, 71, 69, 58, 54, 47, 42],
+    kpis: ["42 AQI", "27,1°C", "4"],
+    captions: ["Udara rata-rata", "Suhu kota", "Lokasi sensor"],
+    locations: [
+      { label: "Rajabasa", detail: "Udara AQI 38 · suhu 28°C", value: 38, status: "Baik", query: "Rajabasa Bandar Lampung" },
+      { label: "Tanjung Karang", detail: "Udara AQI 52 · suhu 29°C", value: 52, status: "Sedang", query: "Tanjung Karang Bandar Lampung" },
+      { label: "Sukarame", detail: "Udara AQI 34 · suhu 27°C", value: 34, status: "Baik", query: "Sukarame Bandar Lampung" },
+      { label: "Teluk Betung", detail: "Udara AQI 44 · suhu 25°C", value: 44, status: "Baik", query: "Teluk Betung Bandar Lampung" },
+    ],
+  },
+  {
+    id: "citizen-report",
+    label: "Laporan Warga",
+    icon: "pin",
+    group: "Ruang warga",
+    description: "Kirim laporan dengan lokasi dan foto, lalu lihat laporan yang tercatat.",
+    metric: "3 laporan demo",
+    unit: "contoh awal",
+    status: "Laporan baru tersimpan di browser ini",
+    values: [46, 52, 67, 61, 79, 73, 86],
+    kpis: ["3", "67%", "3,2 jam"],
+    captions: ["Laporan demo", "Tertangani", "Respons rata-rata"],
+    locations: [
+      { label: "Bandar Lampung", detail: "Laporan warga dan lokasi kejadian", value: 67, status: "Demo", query: "Bandar Lampung" },
+    ],
+  },
+  {
+    id: "urban-dashboard",
+    label: "Urban Dashboard",
+    icon: "chart",
+    group: "Kota",
+    description: "Ringkasan demo kondisi mobilitas, lingkungan, sampah, dan laporan kota.",
+    metric: "78 / 100",
+    unit: "indeks kota demo",
+    status: "Pembaruan simulasi",
+    values: [55, 58, 56, 65, 62, 73, 78],
+    kpis: ["78", "+4", "9"],
+    captions: ["Indeks kota", "Perubahan demo", "Fitur aktif"],
+    locations: [
+      { label: "Rajabasa", detail: "Ringkasan indikator kawasan demo", value: 72, status: "Pantau", query: "Rajabasa Bandar Lampung" },
+      { label: "Tanjung Karang", detail: "Ringkasan indikator kawasan demo", value: 81, status: "Baik", query: "Tanjung Karang Bandar Lampung" },
+      { label: "Teluk Betung", detail: "Ringkasan indikator kawasan demo", value: 68, status: "Pantau", query: "Teluk Betung Bandar Lampung" },
+    ],
+  },
+  {
+    id: "smart-parking",
+    label: "Smart Parking",
+    icon: "car",
+    group: "Mobilitas",
+    description: "Cari lahan parkir umum dan lihat jumlah slot kosong pada demo.",
+    metric: "126 slot",
+    unit: "tersedia di demo",
+    status: "3 lokasi umum",
+    values: [83, 77, 68, 61, 53, 45, 39],
+    kpis: ["126", "3", "72%"],
+    captions: ["Slot kosong", "Lokasi umum", "Ketersediaan"],
+    locations: [
+      { label: "Parkir Taman Gajah", detail: "Parkir umum · 42 dari 80 slot kosong", value: 53, status: "42 kosong", query: "Taman Gajah Bandar Lampung" },
+      { label: "Parkir Pasar Bambu Kuning", detail: "Parkir umum · 18 dari 60 slot kosong", value: 30, status: "18 kosong", query: "Pasar Bambu Kuning Bandar Lampung" },
+      { label: "Parkir Saburai", detail: "Parkir umum · 66 dari 100 slot kosong", value: 66, status: "66 kosong", query: "Lapangan Saburai Bandar Lampung" },
+    ],
+  },
+  {
+    id: "flood-monitoring",
+    label: "Flood Monitoring",
+    icon: "cloud",
+    group: "Lingkungan",
+    description: "Pantau demo tinggi muka air di beberapa aliran sungai Bandar Lampung.",
+    metric: "Siaga",
+    unit: "status simulasi kota",
+    status: "2 titik perlu dipantau",
+    alert: true,
+    values: [28, 31, 29, 66, 72, 61, 55],
+    kpis: ["Siaga", "4", "2"],
+    captions: ["Status demo", "Aliran dipantau", "Perlu perhatian"],
+    locations: [
+      { label: "Way Kuala", detail: "Titik pantau demo · muka air 1,4 m", value: 68, status: "Siaga", query: "Sungai Way Kuala Bandar Lampung" },
+      { label: "Way Kuripan", detail: "Titik pantau demo · muka air 1,1 m", value: 55, status: "Waspada", query: "Sungai Way Kuripan Bandar Lampung" },
+      { label: "Way Awi", detail: "Titik pantau demo · muka air 0,7 m", value: 34, status: "Normal", query: "Sungai Way Awi Bandar Lampung" },
+      { label: "Way Balau", detail: "Titik pantau demo · muka air 1,6 m", value: 76, status: "Siaga", query: "Sungai Way Balau Bandar Lampung" },
+    ],
+  },
+  {
+    id: "smart-notification",
+    label: "Smart Notification",
+    icon: "bell",
+    group: "Ruang warga",
+    description: "Demo peringatan kota untuk cuaca, banjir, dan kepadatan jalan.",
+    metric: "3 aktif",
+    unit: "notifikasi demo",
+    status: "Simulasi pemberitahuan",
+    alert: true,
+    values: [28, 36, 42, 30, 57, 45, 38],
+    kpis: ["3", "4.820", "98%"],
+    captions: ["Peringatan demo", "Penerima simulasi", "Status pengiriman"],
+    locations: [
+      { label: "Way Kuala", detail: "Peringatan demo · kenaikan muka air", value: 68, status: "Siaga", query: "Sungai Way Kuala Bandar Lampung" },
+      { label: "Jl. ZA Pagar Alam", detail: "Peringatan demo · lalu lintas padat", value: 82, status: "Padat", query: "Jalan ZA Pagar Alam Bandar Lampung" },
+      { label: "Tanjung Karang", detail: "Peringatan demo · hujan sedang", value: 46, status: "Pantau", query: "Tanjung Karang Bandar Lampung" },
+    ],
+  },
+];
 
-Sora.navigationGroups = [{
-  label: 'KOTA',
-  items: [{
-    id: 'overview',
-    label: 'Ringkasan kota',
-    icon: 'grid'
-  }, {
-    id: 'city-map',
-    label: 'Peta kota',
-    icon: 'map'
-  }]
-}, {
-  label: 'LAYANAN PINTAR',
-  items: Sora.modules
-    .slice(0, 9)
-    .map(({
-      id,
-      label,
-      icon: glyph
-    }) => ({
-      id,
-      label,
-      icon: glyph
-    }))
-}, {
-  label: 'RUANG WARGA',
-  items: Sora.modules
-    .slice(9)
-    .map(({
-      id,
-      label,
-      icon: glyph
-    }) => ({
-      id,
-      label,
-      icon: glyph
-    }))
-}];
+Sora.demoReports = [
+  {
+    id: "demo-report-1",
+    category: "Infrastruktur jalan",
+    title: "Jalan berlubang",
+    location: "Jl. Teuku Umar",
+    description: "Contoh laporan untuk demonstrasi dashboard.",
+    status: "Menunggu verifikasi",
+    createdAt: new Date(Date.now() - 34 * 60 * 1000).toISOString(),
+    demo: true,
+  },
+  {
+    id: "demo-report-2",
+    category: "Kebersihan lingkungan",
+    title: "Tempat sampah penuh",
+    location: "Tugu Adipura",
+    description: "Contoh laporan untuk demonstrasi dashboard.",
+    status: "Sedang diproses",
+    createdAt: new Date(Date.now() - 60 * 60 * 1000).toISOString(),
+    demo: true,
+  },
+  {
+    id: "demo-report-3",
+    category: "Drainase dan banjir",
+    title: "Saluran air tersumbat",
+    location: "Rajabasa",
+    description: "Contoh laporan untuk demonstrasi dashboard.",
+    status: "Petugas menuju lokasi",
+    createdAt: new Date(Date.now() - 3 * 60 * 60 * 1000).toISOString(),
+    demo: true,
+  },
+];
+
+Sora.navigationGroups = [
+  {
+    label: "KOTA",
+    items: [{ id: "overview", label: "Ringkasan kota", icon: "grid" }],
+  },
+  {
+    label: "LAYANAN KOTA",
+    items: Sora.modules
+      .filter((item) => !["citizen-report", "smart-notification"].includes(item.id))
+      .map(({ id, label, icon: glyph }) => ({ id, label, icon: glyph })),
+  },
+  {
+    label: "RUANG WARGA",
+    items: Sora.modules
+      .filter((item) => ["citizen-report", "smart-notification"].includes(item.id))
+      .map(({ id, label, icon: glyph }) => ({ id, label, icon: glyph })),
+  },
+];
 
 Sora.moduleFor = (id) => Sora.modules.find((item) => item.id === id);

@@ -147,6 +147,58 @@
   resize: vertical;
 }
 
+.field-help {
+  color: #7f8b80;
+  font-size: 9px;
+}
+
+.field-help.field-error {
+  color: #a84e3c;
+}
+
+.report-photo-preview {
+  width: min(100%, 220px);
+  max-height: 150px;
+  border: 1px solid #e1e7dd;
+  border-radius: 6px;
+  object-fit: cover;
+}
+
+.report-thumbnail {
+  width: 48px;
+  height: 48px;
+  flex: 0 0 48px;
+  border-radius: 5px;
+  object-fit: cover;
+}
+
+.report-item .incident-main {
+  min-width: 0;
+}
+
+.report-item .incident-main > div {
+  min-width: 0;
+}
+
+.report-item .incident-main span {
+  overflow-wrap: anywhere;
+}
+
+.report-item {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+}
+
+.report-item .incident-main {
+  grid-row: span 2;
+}
+
+.report-route {
+  grid-column: 1 / -1;
+  margin-left: 16px;
+}
+
 .modal-actions {
   display: flex;
   justify-content: flex-end;

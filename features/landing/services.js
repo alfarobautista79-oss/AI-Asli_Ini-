@@ -36,7 +36,7 @@ export const servicesMarkup = `
             <span class="service-number">01 / MOBILITAS</span>
             <div>
               <h3>Lalu lintas & transportasi</h3>
-              <p>Pantau kepadatan, rute bus, dan pilihan perjalanan di kota.</p>
+              <p>Lihat tingkat kepadatan jalan dan pratinjau CCTV demo.</p>
               <button type="button" data-service-view="smart-traffic" aria-label="Buka layanan lalu lintas dan transportasi">
                 <svg><use href="#i-arrow" /></svg>
               </button>
@@ -50,8 +50,8 @@ export const servicesMarkup = `
             />
             <span class="service-number">02 / LINGKUNGAN</span>
             <div>
-              <h3>Lingkungan & energi</h3>
-              <p>Kenali kualitas udara, ruang hijau, air, sampah, dan energi.</p>
+              <h3>Udara & lingkungan</h3>
+              <p>Bandingkan kualitas udara dan suhu di beberapa lokasi kota.</p>
               <button type="button" data-service-view="green-city" aria-label="Buka layanan lingkungan">
                 <svg><use href="#i-arrow" /></svg>
               </button>
@@ -65,9 +65,9 @@ export const servicesMarkup = `
             />
             <span class="service-number">03 / EKSPLORASI</span>
             <div>
-              <h3>Peta fasilitas kota</h3>
-              <p>Temukan fasilitas publik dan titik layanan di sekitar Anda.</p>
-              <button type="button" data-service-view="city-map" aria-label="Buka peta fasilitas kota">
+              <h3>Parkir umum</h3>
+              <p>Periksa lokasi parkir umum dan jumlah slot kosong pada demo.</p>
+              <button type="button" data-service-view="smart-parking" aria-label="Buka layanan parkir umum">
                 <svg><use href="#i-arrow" /></svg>
               </button>
             </div>
@@ -190,6 +190,7 @@ export function initServices() {
   carousel.querySelectorAll("[data-service-view]").forEach((button) => {
     button.addEventListener("click", () => {
       const destination = new URL("index.html", window.location.href);
+      destination.searchParams.set("from", "landing");
       destination.searchParams.set("view", button.dataset.serviceView);
       window.location.href = destination.href;
     });
