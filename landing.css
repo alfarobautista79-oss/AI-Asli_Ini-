@@ -65,8 +65,10 @@ body {
 }
 
 .landing-brand img {
-  width: clamp(120px, 12vw, 170px);
-  height: auto;
+  display: block;
+  width: auto;
+  height: 56px;
+  flex: 0 0 auto;
   text-decoration: none;
   border-radius: 0;
   object-fit: contain;
@@ -832,8 +834,7 @@ body {
   }
 
   .landing-brand img {
-    width: 34px;
-    height: 34px;
+    height: 44px;
   }
 
   .landing-brand strong {
