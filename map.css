@@ -165,7 +165,7 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  justify-content: end;
+  justify-content: space-between;
   gap: 6px;
   overflow: hidden;
   aspect-ratio: 16 / 9;
@@ -179,13 +179,34 @@
   background: #304c41;
 }
 
-.cctv-preview strong {
+.cctv-stream-icon {
+  display: grid;
+  width: 42px;
+  height: 42px;
+  margin: auto;
+  place-items: center;
+  border: 1px solid rgb(255 255 255 / 40%);
+  border-radius: 50%;
+  color: #e1efce;
+}
+
+.cctv-stream-icon svg {
+  width: 22px;
+  height: 22px;
+}
+
+.cctv-preview-copy {
+  display: grid;
+  gap: 5px;
+}
+
+.cctv-preview-copy strong {
   max-width: 90%;
   font-size: 11px;
   line-height: 1.4;
 }
 
-.cctv-preview > span:last-child {
+.cctv-preview-copy > span {
   color: #d5e0d3;
   font-size: 9px;
 }

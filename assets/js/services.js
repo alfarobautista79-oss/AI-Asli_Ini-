@@ -91,8 +91,9 @@
   function cctvMarkup(cameras) {
     const cards = cameras.map((camera) => `<article class="cctv-card">
       <a class="cctv-preview" href="${camera.stream}" target="_blank" rel="noopener noreferrer" aria-label="Putar video CCTV ${camera.name}">
-        <span class="cctv-badge">SIARAN RESMI</span><span class="cctv-play">${icon("arrow")}</span>
-        <strong>${camera.name}</strong><span>Buka video kamera asli</span>
+        <span class="cctv-badge">CCTV ONLINE · POLRESTA</span><span class="cctv-play">${icon("arrow")}</span>
+        <span class="cctv-stream-icon">${icon("traffic")}</span>
+        <span class="cctv-preview-copy"><strong>${camera.name}</strong><span>Buka player video asli di situs sumber</span></span>
       </a>
       <div class="cctv-card-copy"><span>Sumber: CCTV Online Polresta Bandar Lampung</span><a href="${camera.stream}" target="_blank" rel="noopener noreferrer">${icon("arrow")} Putar video asli</a></div>
     </article>`).join("");
