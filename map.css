@@ -142,6 +142,124 @@
   font-size: 9px;
 }
 
+.cctv-panel {
+  grid-column: 1 / -1;
+}
+
+.cctv-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  padding: 13px;
+}
+
+.cctv-card {
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid #e5eae2;
+  border-radius: 6px;
+  background: #fff;
+}
+
+.cctv-preview {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
+  gap: 6px;
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
+  padding: 15px;
+  color: #f3f6ef;
+  background: #263d36;
+  text-decoration: none;
+}
+
+.cctv-preview:hover {
+  background: #304c41;
+}
+
+.cctv-preview strong {
+  max-width: 90%;
+  font-size: 11px;
+  line-height: 1.4;
+}
+
+.cctv-preview > span:last-child {
+  color: #d5e0d3;
+  font-size: 9px;
+}
+
+.cctv-badge {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  padding: 5px 7px;
+  border-radius: 3px;
+  color: #fff;
+  background: rgb(24 38 29 / 78%);
+  font-size: 8px;
+  font-weight: 800;
+}
+
+.cctv-play {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: grid;
+  width: 27px;
+  height: 27px;
+  place-items: center;
+  border: 1px solid rgb(255 255 255 / 45%);
+  border-radius: 50%;
+  color: white;
+}
+
+.cctv-play svg {
+  width: 14px;
+  height: 14px;
+}
+
+.cctv-card-copy {
+  display: grid;
+  gap: 6px;
+  padding: 11px;
+}
+
+.cctv-card-copy > span {
+  color: #7d887e;
+  font-size: 9px;
+  line-height: 1.45;
+}
+
+.cctv-card-copy > a,
+.cctv-panel .map-caption > a {
+  display: inline-flex;
+  width: fit-content;
+  align-items: center;
+  gap: 5px;
+  color: #456b43;
+  font-size: 9px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.cctv-card-copy > a:hover,
+.cctv-panel .map-caption > a:hover {
+  text-decoration: underline;
+}
+
+.cctv-card-copy svg,
+.cctv-panel .map-caption svg {
+  width: 13px;
+  height: 13px;
+}
+
+.cctv-source {
+  color: #456b43;
+  background: #edf4e8;
+}
+
 .road-open svg {
   width: 14px;
   height: 14px;

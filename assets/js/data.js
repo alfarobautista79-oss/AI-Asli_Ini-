@@ -19,6 +19,20 @@ Sora.modules = [
       { label: "Jl. Teuku Umar", detail: "CCTV demo 02 · ramai", value: 64, status: "Sedang", query: "Jalan Teuku Umar Bandar Lampung" },
       { label: "Jl. Raden Intan", detail: "CCTV demo 03 · lancar", value: 28, status: "Lancar", query: "Jalan Raden Intan Bandar Lampung" },
     ],
+    cameras: [
+      {
+        name: "Jl. Ahmad Yani - MT. Haryono",
+        stream: "https://stream.lihatcctv.com/stream/0196ae81-1086-71ce-97e9-0011f020e524",
+      },
+      {
+        name: "Simpang Simpur Bandar Lampung",
+        stream: "https://stream.lihatcctv.com/stream/0196ae93-dbec-721f-8478-5bef044e25aa",
+      },
+      {
+        name: "Simpang Pasar Tugu",
+        stream: "https://stream.lihatcctv.com/stream/0196ec06-790d-7159-a125-d4b14ddd7d90",
+      },
+    ],
   },
   {
     id: "smart-transport",
