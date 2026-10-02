@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#112b24" />
+    <meta
+      name="description"
+      content="Laci, pusat informasi dan layanan kota Bandar Lampung."
+    />
+    <title>Laci — Lampung Smart City</title>
+    <link rel="icon" type="image/jpeg" href="assets/laci-logo-new.jpg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css" />
+    <link rel="stylesheet" href="landing.css" />
+  </head>
+  <body>
+    <svg
+      aria-hidden="true"
+      width="0"
+      height="0"
+      style="position: absolute; overflow: hidden"
+    >
+      <symbol id="i-pin" viewBox="0 0 24 24">
+        <path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0z" />
+        <circle cx="12" cy="10" r="2.5" />
+      </symbol>
+      <symbol id="i-arrow" viewBox="0 0 24 24">
+        <path d="M5 12h14m-7-7 7 7-7 7" />
+      </symbol>
+    </svg>
+
+    <section class="landing" id="top">
+      <header class="landing-header">
+        <a class="landing-brand" href="#top" aria-label="Laci, kembali ke atas">
+          <img src="assets/laci-logo-new.jpg" alt="" />
+          <span><strong>Laci</strong><small>Lampung Smart City</small></span>
+        </a>
+        <nav class="landing-nav" aria-label="Navigasi halaman">
+          <a href="#tentang">Tentang</a>
+          <a href="#layanan">Layanan</a>
+          <a href="#kontak">Kontak</a>
+        </nav>
+        <a class="landing-enter" href="index.html?from=landing">
+          Masuk ke dasbor <svg><use href="#i-arrow" /></svg>
+        </a>
+      </header>
+
+      <main id="landing-features" aria-busy="true">
+        <div data-feature-src="features/landing/hero.html"></div>
+        <div data-feature-src="features/landing/about.html"></div>
+        <div data-feature-src="features/landing/services.html"></div>
+        <div data-feature-src="features/landing/contact.html"></div>
+      </main>
+      <footer class="landing-footer">
+        <a class="footer-brand" href="#top"
+          >LACI<span> / LAMPUNG SMART CITY</span></a
+        >
+        <span>Informasi kota dalam satu ruang.</span>
+        <a href="#top">Kembali ke atas ↑</a>
+      </footer>
+    </section>
+
+    <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+    <script type="module" src="landing.js"></script>
+  </body>
+</html>

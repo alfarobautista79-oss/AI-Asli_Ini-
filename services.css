@@ -1,0 +1,260 @@
+.menu-toggle {
+  display: none;
+}
+
+.modules-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.search-box {
+  display: flex;
+  width: min(320px, 100%);
+  height: 37px;
+  align-items: center;
+  gap: 8px;
+  padding: 0 11px;
+  border: 1px solid #dfe5dc;
+  border-radius: 7px;
+  background: #fff;
+}
+
+.search-box svg {
+  width: 15px;
+  height: 15px;
+  color: #88938a;
+}
+
+.search-box input {
+  width: 100%;
+  border: 0;
+  outline: 0;
+  color: var(--ink);
+  background: transparent;
+  font-size: 11px;
+}
+
+.module-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.module-card {
+  display: flex;
+  min-height: 160px;
+  flex-direction: column;
+  padding: 15px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: #fff;
+  transition: border-color .18s ease, transform .18s ease;
+}
+
+.module-card:hover {
+  transform: translateY(-2px);
+  border-color: #c6d4b5;
+}
+
+.module-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.module-icon {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  place-items: center;
+  border-radius: 9px;
+  color: #486941;
+  background: #eff4e8;
+}
+
+.module-icon svg {
+  width: 17px;
+  height: 17px;
+}
+
+.module-card h2 {
+  margin: 13px 0 5px;
+  font-family: Manrope, sans-serif;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.module-card p {
+  margin: 0;
+  color: #808b82;
+  font-size: 10px;
+  line-height: 1.55;
+}
+
+.module-card-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: auto;
+  padding-top: 13px;
+  color: #8b958d;
+  font-size: 9px;
+}
+
+.module-card-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0;
+  border: 0;
+  color: #496a3c;
+  background: none;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.module-card-action svg {
+  width: 12px;
+  height: 12px;
+}
+
+.detail-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(255px, .8fr);
+  gap: 14px;
+}
+
+.detail-intro {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding: 17px;
+  border-bottom: 1px solid #edf0eb;
+}
+
+.detail-intro .module-icon {
+  width: 43px;
+  height: 43px;
+}
+
+.detail-intro .module-icon svg {
+  width: 21px;
+  height: 21px;
+}
+
+.detail-intro h2 {
+  margin: 0 0 4px;
+  font-family: Manrope, sans-serif;
+  font-size: 15px;
+}
+
+.detail-intro p {
+  margin: 0;
+  color: #849087;
+  font-size: 10px;
+}
+
+.detail-body {
+  padding: 17px;
+}
+
+.detail-kpis {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.detail-kpi {
+  padding: 12px;
+  border-radius: 8px;
+  background: #f6f8f3;
+}
+
+.detail-kpi span {
+  display: block;
+  color: #838d84;
+  font-size: 9px;
+}
+
+.detail-kpi strong {
+  display: block;
+  margin-top: 6px;
+  font-family: Manrope, sans-serif;
+  font-size: 19px;
+}
+
+.detail-section-title {
+  margin: 19px 0 10px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.detail-chart {
+  display: flex;
+  height: 140px;
+  align-items: end;
+  gap: 9px;
+  padding: 8px 3px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.device-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 11px 0;
+  border-bottom: 1px solid #edf0eb;
+}
+
+.device-row:last-child {
+  border-bottom: 0;
+}
+
+.device-row strong {
+  display: block;
+  font-size: 10px;
+}
+
+.device-row span {
+  display: block;
+  margin-top: 3px;
+  color: #8b958d;
+  font-size: 9px;
+}
+
+.toggle {
+  position: relative;
+  width: 34px;
+  height: 19px;
+  flex: 0 0 34px;
+  padding: 0;
+  border: 0;
+  border-radius: 20px;
+  background: #d8ded7;
+  transition: background .18s ease;
+}
+
+.toggle::after {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: white;
+  content: '';
+  transition: transform .18s ease;
+}
+
+.toggle[aria-checked="true"] {
+  background: #83aa48;
+}
+
+.toggle[aria-checked="true"]::after {
+  transform: translateX(15px);
+}
