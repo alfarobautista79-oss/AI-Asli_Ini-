@@ -65,11 +65,15 @@ body {
 }
 
 .landing-brand img {
-  width: 39px;
-  height: 39px;
+  width: clamp(120px, 12vw, 170px);
+  height: auto;
   text-decoration: none;
-  border-radius: 10px;
-  object-fit: cover;
+  border-radius: 0;
+  object-fit: contain;
+}
+
+.landing-brand span {
+  display: none;
 }
 
 .landing-brand strong,
